@@ -17,7 +17,11 @@ $OUTPUT->bodyStart();
 $OUTPUT->topNav();
 $OUTPUT->flashMessages();
 
-echo("I am here");
+?>
+<a href="createDummyData.php?num=0">Create Dummy Data</a>
+<?php
+
+printVarDump(getCurrentStudents($LTI->context->id));
 
 $OUTPUT->footerStart();
 $OUTPUT->footerEnd();
