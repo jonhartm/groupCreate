@@ -8,7 +8,7 @@ function getCurrentStudents($context_id)
 
   // Get basic grade data
   $stmt = $PDOX->queryDie(
-    "SELECT u.user_id, displayname, email, role
+    "SELECT u.user_id, COALESCE(displayname, 'Anonymous') as displayname, email, role
       FROM lti_user AS u
         JOIN lti_membership AS m ON u.user_id = m.user_id
     WHERE m.context_id = :CID AND m.role = 0",
