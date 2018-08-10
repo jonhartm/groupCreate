@@ -11,18 +11,44 @@ $LTI = LTIX::requireData();
 // Handle the POST Data
 $p = $CFG->dbprefix;
 
+$student_list = getCurrentStudents($LTI->context->id);
+
 // Create the view
 $OUTPUT->header();
+?>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<?php
 $OUTPUT->bodyStart();
 $OUTPUT->topNav();
 $OUTPUT->flashMessages();
-
 ?>
-<a href="createDummyData.php?num=0">Create Dummy Data</a>
+
+<div class="container col-md-12">
+  <div class="col-md-2">
+    <ul class="list-group">
+      <?php
+      foreach ($student_list as $student) {
+        echo("<li class='list-group-item'>{$student['displayname']}</li>");
+      }
+      ?>
+    </ul>
+  </div>
+  <div class="col-md-2">
+    <div class="vcenter">
+      <div class="btn-group col-md-12 bot5 no-pad">
+        <button type="button" class="btn btn-default col-md-6">Size</button>
+        <button type="button" class="btn btn-default col-md-6">Number</button>
+      </div>
+      <input class="col-md-6" id="number" type="number" value="2">
+      <button type="button" class="btn btn-primary col-md-12 top5">Create 2 groups ></button>
+    </div>
+  </div>
+  <div class="col-md-8">
+    3 of 3
+  </div>
+</div>
+
 <?php
-
-printVarDump(getCurrentStudents($LTI->context->id));
-
 $OUTPUT->footerStart();
 $OUTPUT->footerEnd();
 ?>

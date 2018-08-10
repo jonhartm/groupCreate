@@ -1,0 +1,29 @@
+.list-group-item {
+  font-size: 90%;
+  padding: 5px 10px;
+  text-align: center;
+}
+
+.list-group-item:hover {
+  background-color: #ebebeb;
+}
+
+.top5 {
+  margin-top:5px;
+}
+
+.bot5 {
+  margin-bottom:5px;
+}
+
+.no-pad {
+  padding: 0;
+}
+
+.vcenter {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    height: 95vh;
+}
