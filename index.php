@@ -11,8 +11,6 @@ $LTI = LTIX::requireData();
 // Handle the POST Data
 $p = $CFG->dbprefix;
 
-$student_list = getCurrentStudents($LTI->context->id);
-
 // Create the view
 $OUTPUT->header();
 ?>
@@ -25,13 +23,7 @@ $OUTPUT->flashMessages();
 
 <div class="container col-md-12">
   <div class="col-md-2">
-    <ul class="list-group">
-      <?php
-      foreach ($student_list as $student) {
-        echo("<li class='list-group-item'>{$student['displayname']}</li>");
-      }
-      ?>
-    </ul>
+    <div id="class_list"></div>
   </div>
   <div class="col-md-2">
     <div class="vcenter">
@@ -44,11 +36,27 @@ $OUTPUT->flashMessages();
     </div>
   </div>
   <div class="col-md-8">
-    3 of 3
+    <div id="group_container"></div>
   </div>
 </div>
 
 <?php
 $OUTPUT->footerStart();
+$OUTPUT->templateInclude('list');
+?>
+<script>
+STUDENT_LIST = {}
+$(document).ready(function() {
+  $.getJSON('<?= addSession('getStudentList.php')?>', function(students) {
+    STUDENT_LIST = students;
+  }).done(function() {
+    console.log(STUDENT_LIST);
+    context = {};
+    context.students = STUDENT_LIST;
+    $('#class_list').append(tsugiHandlebarsRender('list', context));
+  });
+});
+</script>
+<?php
 $OUTPUT->footerEnd();
 ?>
