@@ -19,6 +19,12 @@ $("#create_groups").click(function() {
     context.name = "Group " + String(i+1);
     $('#group_div_container').append(tsugiHandlebarsRender('list', context));
   }
+
+  $( ".connectedSortable" ).sortable({
+    connectWith: ".connectedSortable"
+  }).disableSelection();
+
+
 });
 
 // when either of the size buttons is pressed
