@@ -1,4 +1,7 @@
-<div class="list-container">
+<div class="list-container {{#if group}}group-container{{/if}}">
+  {{#if name}}
+  <p class="group_name">{{name}}</p>
+  {{/if}}
   <ul class="list-group">
     {{#each students}}
       <li class="list-group-item">{{this.displayname}}</li>
