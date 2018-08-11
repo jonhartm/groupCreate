@@ -4,7 +4,10 @@
   {{/if}}
   <ul class="list-group connectedSortable">
     {{#each students}}
-      <li class="list-group-item">{{this.displayname}}</li>
+      <li class="list-group-item">
+        {{this.displayname}}
+        <input type="hidden" value={{this.user_id}}>
+      </li>
     {{/each}}
   </ul>
 </div>
