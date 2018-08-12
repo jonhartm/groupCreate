@@ -37,6 +37,8 @@ $OUTPUT->flashMessages();
   </div>
 </div>
 
+<button type="button" class="btn btn-lg btn-default col-md-12" id="submit_groups" style="display:none;">Confirm Groups</button>
+
 <?php
 $OUTPUT->footerStart();
 $OUTPUT->templateInclude('list');

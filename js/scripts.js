@@ -38,7 +38,8 @@ $("#create_groups").click(function() {
     }
   }).disableSelection();
 
-
+  // Show the submit button once we've made at least one group
+  $("#submit_groups").show();
 });
 
 // when either of the size buttons is pressed
