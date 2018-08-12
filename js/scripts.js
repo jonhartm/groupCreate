@@ -20,8 +20,22 @@ $("#create_groups").click(function() {
     $('#group_div_container').append(tsugiHandlebarsRender('list', context));
   }
 
+  // Apply sortable to all of the lists
   $( ".connectedSortable" ).sortable({
-    connectWith: ".connectedSortable"
+    connectWith: ".connectedSortable",
+    // event fires when an item is moved into another list
+    over: function(event, ui) {
+      // get the sender if this was the last item in the list
+      if (ui.sender != null && ui.sender.children("li").length == 1) {
+        // and add an empty placeholder list item
+        ui.sender.append('<li class="list-group-item empty-list-item">Empty</li>');
+      }
+    },
+    // event fires when an item is dropped into another list
+    receive: function(event, ui) {
+      // remove any "empty" placeholders that were in the list
+      ui.item.siblings(".empty-list-item").remove();
+    }
   }).disableSelection();
 
 

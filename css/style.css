@@ -12,6 +12,11 @@
   cursor: move;
 }
 
+.empty-list-item {
+  border: 1px dashed #ccc;
+  background-color: #f6f6f6;
+}
+
 .top5 {
   margin-top:5px;
 }
