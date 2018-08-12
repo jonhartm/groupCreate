@@ -11,6 +11,11 @@ $LTI = LTIX::requireData();
 // Handle the POST Data
 $p = $CFG->dbprefix;
 
+$content = file_get_contents("php://input");
+if (isset($content) && $content != '') {
+  $LINK->setJson($content);
+}
+
 // Create the view
 $OUTPUT->header();
 ?>
@@ -24,8 +29,8 @@ $OUTPUT->flashMessages();
 <div class="container">
   <div class="col-md-12">
     <div class="btn-group col-md-4">
-      <button type="button" class="btn btn-default col-md-6 group_size_by_btn active" value="groups_by_size">Max Group Size</button>
-      <button type="button" class="btn btn-default col-md-6 group_size_by_btn" value="groups_by_num">Number of Groups</button>
+      <button type="button" class="btn btn-default col-md-6 group_size_by_btn" value="groups_by_size">Max Group Size</button>
+      <button type="button" class="btn btn-default col-md-6 group_size_by_btn active" value="groups_by_num">Number of Groups</button>
     </div>
     <div class="col-md-2">
       <input class="form-control" id="number" type="number" value="2" min=0>

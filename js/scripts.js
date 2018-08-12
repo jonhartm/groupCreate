@@ -61,6 +61,31 @@ $("#number").bind('input', function() {
   set_button_text();
 });
 
+$("#submit_groups").click(function() {
+  var groups = [];
+  $.each($("#group_div_container").children(".group-container"), function(index, div) {
+    var group = {};
+    group.name = $(div).find(".group_name").text();
+    group.ids = $.map($(div).find("input"), function(item) { return $(item).val(); });
+    groups.push(group);
+  });
+
+  var x = $.ajax({
+    type: "POST",
+    url: addSession("index.php"),
+    data: JSON.stringify(groups),
+    contentType: "application/json",
+    success: function(response) {
+      console.log(response);
+      window.location.href = addSession("index.php");
+    }
+  }).done(function() {
+    console.log("ajax post sent");
+  });
+
+  console.log(x);
+});
+
 // Set the text of the button to reflect the current group number/size
 function set_button_text() {
   size = get_group_size();
