@@ -90,6 +90,7 @@ function drawGroups(groups) {
   // Apply sortable to all of the lists
   $( ".connectedSortable" ).sortable({
     connectWith: ".connectedSortable",
+    cancel: ".empty-list-item",
     // event fires when an item is moved into another list
     over: function(event, ui) {
       // get the sender if this was the last item in the list
