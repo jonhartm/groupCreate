@@ -13,7 +13,9 @@ $p = $CFG->dbprefix;
 
 $content = file_get_contents("php://input");
 if (isset($content) && $content != '') {
-  $LINK->setJson($content);
+  $LINK->setJsonKey("current",$content);
+} else {
+  $content = json_decode($LINK->getJsonKey("current"));
 }
 
 // Create the view
@@ -25,7 +27,6 @@ $OUTPUT->bodyStart();
 $OUTPUT->topNav();
 $OUTPUT->flashMessages();
 ?>
-
 <div class="container">
   <div class="col-md-12">
     <div class="btn-group col-md-4">
@@ -38,7 +39,7 @@ $OUTPUT->flashMessages();
     <button type="button" class="btn btn-primary col-md-6" id="create_groups">Placeholder...</button>
   </div>
   <div class="col-md-12">
-    <div id="group_div_container"></div>
+    <div id="group_div_container">No Groups Set...</div>
   </div>
 </div>
 
@@ -56,6 +57,7 @@ $(document).ready(function() {
   }).done(function() {
     // Prime the create button with the proper text
     set_button_text();
+    drawGroups(<?= json_encode($content) ?>);
   });
 });
 </script>

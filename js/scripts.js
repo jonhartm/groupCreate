@@ -1,4 +1,6 @@
-// When the button to create groups is pressed...
+// When the button to create groups is pressed
+// Shuffles the global var STUDENT_LIST, then calls functions to parcel out
+// students to groups and display them in the div on the page
 $("#create_groups").click(function() {
   // Empty the contents of the current div
   $('#group_div_container').empty();
@@ -9,14 +11,79 @@ $("#create_groups").click(function() {
   // Get the size of the group...
   var size = get_group_size();
   // and use it to create groups
-  var groups = create_groups(size.num_groups);
+  drawGroups(create_groups(size.num_groups));
+
+  // Show the submit button once we've made at least one group
+  $("#submit_groups").show();
+});
+
+// When either of the size buttons is pressed, make them act like a radio button,
+// i.e. only one pressed at a time, and pressing one un-sets the other
+$(".group_size_by_btn").click(function() {
+  // remove the "active" class from both
+  $(".group_size_by_btn").each(function() {$(this).removeClass("active"); });
+
+  // and only add it back to the one which was pressed
+  $(this).addClass("active");
+
+  // update the button text
+  set_button_text();
+});
+
+// regarding .change() only firing on loss of focus
+// see https://gist.github.com/brandonaaskov/1596867
+// update the button text every time the user changes the value of the number input
+$("#number").bind('input', function() {
+  set_button_text();
+});
+
+// When the "Submit" button is pressed at the bottom of the page.
+// Pulls the group data into a js object and passes it to the server via ajax
+$("#submit_groups").click(function() {
+  // roll through the divs and get each group in turn.
+  var groups = [];
+  $.each($("#group_div_container").children(".group-container"), function(index, div) {
+    var group = {};
+    group.name = $(div).find(".group_name").text();
+    // get the student ids from the lists in this div and save it as an array in the object
+    group.ids = $.map($(div).find("input"), function(item) { return $(item).val(); });
+    groups.push(group);
+  });
+
+  // send the groups object as a post request
+  $.ajax({
+    type: "POST",
+    url: addSession("index.php"),
+    data: JSON.stringify(groups),
+    contentType: "application/json",
+    success: function(response) {
+      // redirect to index on success
+      window.location.href = addSession("index.php");
+    }
+  }).done(function() {
+    console.log("Group submitted");
+  });
+});
+
+// Do the work of converting the groups object into html via templates
+function drawGroups(groups) {
+  // If there's no info here, just hide the submit button for now and bail
+  // Happens if there is no saved group information
+  if (groups == null) {
+    $("#submit_groups").hide();
+    return;
+  }
+
+  // If we got this far, un-hide the submit button and clear out the div
+  $("#submit_groups").show();
+  $("#group_div_container").empty();
 
   // append a template of each group to the div
   for (var i = 0; i < groups.length; i++) {
     context = {};
-    context.students = groups[i];
+    context.students = get_student_names_by_id(groups[i].ids);
     context.group = true;
-    context.name = "Group " + String(i+1);
+    context.name = groups[i].name;
     $('#group_div_container').append(tsugiHandlebarsRender('list', context));
   }
 
@@ -37,54 +104,23 @@ $("#create_groups").click(function() {
       ui.item.siblings(".empty-list-item").remove();
     }
   }).disableSelection();
+}
 
-  // Show the submit button once we've made at least one group
-  $("#submit_groups").show();
-});
-
-// when either of the size buttons is pressed
-$(".group_size_by_btn").click(function() {
-  // remove the "active" class from both
-  $(".group_size_by_btn").each(function() {$(this).removeClass("active"); });
-
-  // and only add it back to the one which was pressed
-  $(this).addClass("active");
-
-  // update the button text
-  set_button_text();
-});
-
-// regarding .change() only firing on loss of focus
-// see https://gist.github.com/brandonaaskov/1596867
-// update the button text every time the user changes the value of the number input
-$("#number").bind('input', function() {
-  set_button_text();
-});
-
-$("#submit_groups").click(function() {
-  var groups = [];
-  $.each($("#group_div_container").children(".group-container"), function(index, div) {
-    var group = {};
-    group.name = $(div).find(".group_name").text();
-    group.ids = $.map($(div).find("input"), function(item) { return $(item).val(); });
-    groups.push(group);
-  });
-
-  var x = $.ajax({
-    type: "POST",
-    url: addSession("index.php"),
-    data: JSON.stringify(groups),
-    contentType: "application/json",
-    success: function(response) {
-      console.log(response);
-      window.location.href = addSession("index.php");
+// To avoid storing more data than we have to in the json field, we're just keeping a
+// list of ints that match to user_ids. Here is were we match the student ID to a name
+// from the STUDENT_LIST variable we load at the beginning.
+function get_student_names_by_id(ids) {
+  var students = [];
+  $.each(ids, function(index, id) {
+    for (var i = 0; i < STUDENT_LIST.length; i++) {
+      if (STUDENT_LIST[i]["user_id"] == id) {
+        students.push(STUDENT_LIST[i]);
+        break;
+      }
     }
-  }).done(function() {
-    console.log("ajax post sent");
-  });
-
-  console.log(x);
-});
+  })
+  return students;
+}
 
 // Set the text of the button to reflect the current group number/size
 function set_button_text() {
@@ -138,13 +174,15 @@ function create_groups(num_groups) {
   // create an array of size "num_groups"
   groups = [];
   for (var i = 0; i < num_groups; i++) {
-    // initialize each of those to an empty array
-    groups[i] = [];
+    groups[i] = {
+      name: "Group " + String(i+1),
+      ids: []
+    };
   }
 
   // run through the student list and dole out each student to a group in turn
   for (var i = 0; i < STUDENT_LIST.length; i++) {
-    groups[i%num_groups].push(STUDENT_LIST[i]);
+    groups[i%num_groups].ids.push(STUDENT_LIST[i]["user_id"]);
   }
   return groups;
 }
