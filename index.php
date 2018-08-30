@@ -18,6 +18,21 @@ if (isset($content) && $content != '') {
   $content = json_decode($LINK->getJsonKey("current"));
 }
 
+if (!$USER->instructor) {
+  // Figure out what group this student is in
+  $my_group = null;
+  foreach ($content as $group) {
+    if (in_array($USER->id, $group->ids)) {
+      $my_group = $group;
+      $my_group->members = [];
+      foreach ($group->ids as $id) {
+        array_push($my_group->members, $USER::loadUserInfoBypass($id));
+      }
+    }
+  }
+  $content = array($my_group);
+}
+
 // Create the view
 $OUTPUT->header();
 ?>
@@ -28,6 +43,9 @@ $OUTPUT->topNav();
 $OUTPUT->flashMessages();
 ?>
 <div class="container">
+<?php
+if ($USER->instructor) {
+?>
   <div class="col-md-12">
     <div class="btn-group col-md-4">
       <button type="button" class="btn btn-default col-md-6 group_size_by_btn" value="groups_by_size">Max Group Size</button>
@@ -38,12 +56,19 @@ $OUTPUT->flashMessages();
     </div>
     <button type="button" class="btn btn-primary col-md-6" id="create_groups">Placeholder...</button>
   </div>
+<?php
+}
+?>
   <div class="col-md-12">
     <div id="group_div_container">No Groups Set...</div>
   </div>
 </div>
+<?php
+if ($USER->instructor) {
+  echo '<button type="button" class="btn btn-lg btn-default col-md-12" id="submit_groups" style="display:none;">Confirm Groups</button>';
+}
+?>
 
-<button type="button" class="btn btn-lg btn-default col-md-12" id="submit_groups" style="display:none;">Confirm Groups</button>
 
 <?php
 $OUTPUT->footerStart();
@@ -58,6 +83,11 @@ $(document).ready(function() {
     // Prime the create button with the proper text
     set_button_text();
     drawGroups(<?= json_encode($content) ?>);
+  }).fail(function(jq, status, error) {
+    console.log("I've failed...");
+    console.log(jq);
+    console.log(status);
+    console.log(error);
   });
 });
 </script>
