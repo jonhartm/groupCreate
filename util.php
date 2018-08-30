@@ -1,9 +1,9 @@
 <?php
 
-function getCurrentStudents($context_id)
+function getCurrentStudents($context_id, $req_instructor_role=true)
 {
   global $CFG, $USER, $LINK, $PDOX;
-  if ( ! $USER->instructor ) die("Requires instructor role");
+  if ( ! $USER->instructor && $req_instructor_role) die("Requires instructor role");
   $p = $CFG->dbprefix;
 
   // Get basic grade data

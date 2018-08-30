@@ -10,4 +10,4 @@ $gift = $LINK->getJson();
 
 Output::headerJson();
 
-echo(json_encode(getCurrentStudents($LTI->context->id), JSON_PRETTY_PRINT));
+echo(json_encode(getCurrentStudents($LTI->context->id, false), JSON_PRETTY_PRINT));
