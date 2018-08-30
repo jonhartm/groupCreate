@@ -125,8 +125,10 @@ function get_student_names_by_id(ids) {
 
 // Set the text of the button to reflect the current group number/size
 function set_button_text() {
-  size = get_group_size();
-  $("#create_groups").text("Create " + size.num_groups + " Groups of (no more than) " + size.size_groups);
+  if ($("#create_groups").length) {
+    size = get_group_size();
+    $("#create_groups").text("Create " + size.num_groups + " Groups of (no more than) " + size.size_groups);
+  }
 }
 
 // Determine the size of the group/number of groups
