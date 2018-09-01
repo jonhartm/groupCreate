@@ -1,3 +1,5 @@
+@import 'modules/colors';
+
 #group_div_container {
   display: flex;
   flex-flow: row wrap;
@@ -6,7 +8,7 @@
 }
 
 .group-container {
-  border: 1px solid #eee;
+  border: 1px solid $light-grey;
   flex: 0 1 auto;
   padding: 5%;
 }
@@ -18,16 +20,17 @@
   min-width: 180px;
   padding: 5px 10px;
   text-align: center;
-}
-.list-group-item:hover {
-  background-color: #eee;
-  cursor: move;
+
+  &:hover {
+    background-color: $light-grey;
+    cursor: move;
+  }
 }
 
 .empty-list-item {
-  background-color: #f6f6f6;
-  border: 1px dashed #ccc;
-  color: #eee;
+  background-color: $very-light-grey;
+  border: 1px dashed $dark-grey;
+  color: $light-grey;
 }
 
 .vcenter {
@@ -37,5 +40,3 @@
   height: 95vh;
   justify-content: center;
 }
-
-/*# sourceMappingURL=style.css.map */
