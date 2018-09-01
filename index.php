@@ -67,10 +67,10 @@ if ($USER->instructor) {
 ?>
 <div class="student-group-title">
   <h1 id="student-group-title">(placeholder)</h1>
-  <h2 id="student-group-subtitle">Group Members:</h2>
   <h2>
     <a id="email-all" href="">E-mail all group members</a>
   </h2>
+  <h2 id="student-group-subtitle">Group Members:</h2>
 </div>
 <?php
 }
