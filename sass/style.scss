@@ -20,19 +20,23 @@
   padding: 5%;
 }
 
-#student-group-title {
-  @include title-text-font;
 
-  background-color: $light-grey;
-  border: 1px solid $dark-grey;
-  border-radius: 5px;
-  padding: 1%;
-  text-align: center;
-}
 
-#student-group-subtitle {
-  @include subtitle-text-font;
-  text-align: center;
+.student-group-title {
+  h1 {
+    @include title-text-font;
+
+    background-color: $light-grey;
+    border: 1px solid $dark-grey;
+    border-radius: 5px;
+    padding: 1%;
+    text-align: center;
+  }
+
+  h2 {
+    @include subtitle-text-font;
+    text-align: center;
+  }
 }
 
 .student-info {

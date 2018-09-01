@@ -124,6 +124,15 @@ function drawStudentGroup(group) {
   for (var i = 0; i < group['members'].length; i++) {
     $('#group_div_container').append(tsugiHandlebarsRender('group_member', group['members'][i]));
   }
+
+  // Put everyone's emails together in the group email link
+  var group_emails = [];
+  $.each(group['members'], function(index, member) {
+    group_emails.push(member['email'])
+  });
+
+  $("#email-all").attr("href", "mailto:" + group_emails.join(","));
+
 }
 
 // To avoid storing more data than we have to in the json field, we're just keeping a
