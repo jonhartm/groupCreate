@@ -59,6 +59,13 @@ if ($USER->instructor) {
     <button type="button" class="btn btn-primary col-md-6" id="create_groups">Placeholder...</button>
   </div>
 <?php
+} else {
+?>
+<div>
+  <p id="student-group-title">(placeholder)</p>
+  <p id="student-group-subtitle">Group Members:</p>
+</div>
+<?php
 }
 ?>
   <div class="col-md-12">
@@ -74,7 +81,7 @@ if ($USER->instructor) {
 
 <?php
 $OUTPUT->footerStart();
-$OUTPUT->templateInclude('list');
+$OUTPUT->templateInclude(array('list','group_member'));
 ?>
 <script>
 STUDENT_LIST = {}
@@ -84,7 +91,19 @@ $(document).ready(function() {
   }).done(function() {
     // Prime the create button with the proper text
     set_button_text();
-    drawGroups(<?= json_encode($content) ?>);
+<?php
+    if ($USER->instructor) {
+    // if the user is an instructor, draw all of the groups together
+?>
+      drawGroups(<?= json_encode($content) ?>);
+<?php
+    } else {
+    // if the user is a student, draw the student's group person by person
+?>
+      drawStudentGroup(<?= json_encode($content) ?>);
+<?php
+    }
+?>
   }).fail(function(jq, status, error) {
     console.log("I've failed...");
     console.log(jq);

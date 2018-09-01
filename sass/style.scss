@@ -1,4 +1,9 @@
 @import 'modules/colors';
+@import 'modules/fonts';
+
+.container {
+  margin-top: 15px;
+}
 
 #group_div_container {
   display: flex;
@@ -8,9 +13,41 @@
 }
 
 .group-container {
-  border: 1px solid $light-grey;
+  border: 1px solid $dark-grey;
+  border-radius: 5px;
   flex: 0 1 auto;
+  margin: 2px;
   padding: 5%;
+}
+
+#student-group-title {
+  @include title-text-font;
+
+  background-color: $light-grey;
+  border: 1px solid $dark-grey;
+  border-radius: 5px;
+  padding: 1%;
+  text-align: center;
+}
+
+#student-group-subtitle {
+  @include subtitle-text-font;
+  text-align: center;
+}
+
+.student-info {
+  border-color: $very-dark-grey;
+  box-shadow: 2px 2px 2px $dark-grey;
+  text-align: center;
+  width: 250px;
+
+  .displayname {
+    @include subtitle-text-font;
+  }
+
+  .email {
+    @include subtitle-italic-font;
+  }
 }
 
 .list-group-item {

@@ -107,6 +107,25 @@ function drawGroups(groups) {
   }).disableSelection();
 }
 
+// Called when a student is viewing the page.
+// Instead of the group & draggables, shows each member of the student's group
+// in it's own container that gets styled seperatly than the groups
+function drawStudentGroup(group) {
+  // groups are in array form for the instructor's screen.
+  group = group[0];
+
+  // Set the title for the student group
+  $("#student-group-title").text("You are in " + group['name']);
+
+  // Clear the container...
+  $("#group_div_container").empty();
+
+  // Add each member in turn..
+  for (var i = 0; i < group['members'].length; i++) {
+    $('#group_div_container').append(tsugiHandlebarsRender('group_member', group['members'][i]));
+  }
+}
+
 // To avoid storing more data than we have to in the json field, we're just keeping a
 // list of ints that match to user_ids. Here is were we match the student ID to a name
 // from the STUDENT_LIST variable we load at the beginning.
