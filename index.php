@@ -26,7 +26,9 @@ if (!$USER->instructor) {
       $my_group = $group;
       $my_group->members = [];
       foreach ($group->ids as $id) {
-        array_push($my_group->members, $USER::loadUserInfoBypass($id));
+        if ($id !== $USER->id) {
+          array_push($my_group->members, $USER::loadUserInfoBypass($id));
+        }
       }
     }
   }
