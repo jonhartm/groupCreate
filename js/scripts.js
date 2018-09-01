@@ -50,11 +50,23 @@ $("#submit_groups").click(function() {
     groups.push(group);
   });
 
+  // pass the current settings here so we can keep them
+  var settings = {};
+  $(".group_size_by_btn").each(function() {
+    if ($(this).hasClass("active")) {
+      settings.group_by = $(this).val();
+    }
+  });
+  settings.number = $("#number").val();
+
   // send the groups object as a post request
   $.ajax({
     type: "POST",
     url: addSession("index.php"),
-    data: JSON.stringify(groups),
+    data: JSON.stringify({
+      "groups":groups,
+      "settings":settings
+    }),
     contentType: "application/json",
     success: function(response) {
       // redirect to index on success

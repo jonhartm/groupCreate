@@ -13,21 +13,25 @@ $p = $CFG->dbprefix;
 
 $content = file_get_contents("php://input");
 if (isset($content) && $content != '') {
-  $LINK->setJsonKey("current",$content);
+  $LINK->setJsonKey("current",json_decode($content)->groups);
+  $settings = json_decode($content)->settings;
+  SETTINGS::linkSet("group_by", $settings->group_by);
+  SETTINGS::linkSet("number", $settings->number);
 } else {
-  $content = json_decode($LINK->getJsonKey("current"));
+  $content = $LINK->getJsonKey("current");
+
 }
 
 if (!$USER->instructor) {
   // Figure out what group this student is in
   $my_group = null;
   foreach ($content as $group) {
-    if (in_array($USER->id, $group->ids)) {
+    if (in_array($USER->id, $group["ids"])) {
       $my_group = $group;
-      $my_group->members = [];
-      foreach ($group->ids as $id) {
+      $my_group["members"] = [];
+      foreach ($group["ids"] as $id) {
         if ($id !== $USER->id) {
-          array_push($my_group->members, $USER::loadUserInfoBypass($id));
+          array_push($my_group["members"], $USER::loadUserInfoBypass($id));
         }
       }
     }
@@ -50,11 +54,22 @@ if ($USER->instructor) {
 ?>
   <div class="col-md-12">
     <div class="btn-group col-md-4">
-      <button type="button" class="btn btn-default col-md-6 group_size_by_btn" value="groups_by_size">Max Group Size</button>
-      <button type="button" class="btn btn-default col-md-6 group_size_by_btn active" value="groups_by_num">Number of Groups</button>
+<?php
+  if (SETTINGS::linkGet("group_by", "groups_by_num") === "groups_by_num"){
+?>
+    <button type="button" class="btn btn-default col-md-6 group_size_by_btn" value="groups_by_size">Max Group Size</button>
+    <button type="button" class="btn btn-default col-md-6 group_size_by_btn active" value="groups_by_num">Number of Groups</button>
+<?php
+  } else {
+?>
+    <button type="button" class="btn btn-default col-md-6 group_size_by_btn active" value="groups_by_size">Max Group Size</button>
+    <button type="button" class="btn btn-default col-md-6 group_size_by_btn" value="groups_by_num">Number of Groups</button>
+<?php
+  }
+?>
     </div>
     <div class="col-md-2">
-      <input class="form-control" id="number" type="number" value="2" min=0>
+      <input class="form-control" id="number" type="number" value="<?= SETTINGS::linkGet("number", 2) ?>" min=2>
     </div>
     <button type="button" class="btn btn-primary col-md-6" id="create_groups">Placeholder...</button>
   </div>
