@@ -54,19 +54,8 @@ if ($USER->instructor) {
 ?>
   <div class="col-md-12">
     <div class="btn-group col-md-4">
-<?php
-  if (SETTINGS::linkGet("group_by", "groups_by_num") === "groups_by_num"){
-?>
-    <button type="button" class="btn btn-default col-md-6 group_size_by_btn" value="groups_by_size">Max Group Size</button>
-    <button type="button" class="btn btn-default col-md-6 group_size_by_btn active" value="groups_by_num">Number of Groups</button>
-<?php
-  } else {
-?>
-    <button type="button" class="btn btn-default col-md-6 group_size_by_btn active" value="groups_by_size">Max Group Size</button>
-    <button type="button" class="btn btn-default col-md-6 group_size_by_btn" value="groups_by_num">Number of Groups</button>
-<?php
-  }
-?>
+      <button type="button" class="btn btn-default col-md-6 group_size_by_btn" value="groups_by_size">Max Group Size</button>
+      <button type="button" class="btn btn-default col-md-6 group_size_by_btn" value="groups_by_num">Number of Groups</button>
     </div>
     <div class="col-md-2">
       <input class="form-control" id="number" type="number" value="<?= SETTINGS::linkGet("number", 2) ?>" min=2>
@@ -107,6 +96,7 @@ $(document).ready(function() {
     STUDENT_LIST = students;
   }).done(function() {
     // Prime the create button with the proper text
+    set_active_button("<?= SETTINGS::linkGet("group_by", "groups_by_num") ?>");
     set_button_text();
 <?php
     if ($USER->instructor) {

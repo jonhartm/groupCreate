@@ -171,6 +171,14 @@ function set_button_text() {
   }
 }
 
+function set_active_button(name) {
+  $(".group_size_by_btn").each(function() {
+    if ($(this).val() == name) {
+      $(this).addClass('active');
+    }
+  });
+}
+
 // Determine the size of the group/number of groups
 function get_group_size() {
   // find out which of the buttons is currently active
