@@ -74,12 +74,11 @@ if ($USER->instructor) {
 </div>
 <?php
 if ($USER->instructor) {
-  echo '<button type="button" class="btn btn-lg btn-default col-md-12" id="submit_groups" style="display:none;">Confirm Groups</button>';
-}
 ?>
-
-
+  <button type="button" class="btn btn-lg btn-default col-md-12" id="submit_groups" style="display:none;">Confirm Groups</button>
 <?php
+}
+
 $OUTPUT->footerStart();
 $OUTPUT->templateInclude(array('list','group_member'));
 ?>
